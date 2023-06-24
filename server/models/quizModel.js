@@ -21,10 +21,7 @@ const quizSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    question: {
-        type: String,
-        required: true
-    },
+    questions: [],
     students: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

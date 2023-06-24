@@ -6,5 +6,4 @@ module.exports = {
     url: db.url,
     userModel: require('./userModel'),
     quizModel: require('./quizModel'),
-    questionModel: require('./questionModel')
 }
