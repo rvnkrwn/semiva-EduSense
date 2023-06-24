@@ -1,6 +1,5 @@
 const initialState = {
     isLoggedIn: false,
-    // Add other auth-related properties if needed
 };
 
 const authReducer = (state = initialState, action) => {
@@ -10,7 +9,11 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: true,
             };
-        // Add other cases as needed
+        case 'SET_LOGGED_OUT':
+            return {
+                ...state,
+                isLoggedIn: false,
+            };
         default:
             return state;
     }

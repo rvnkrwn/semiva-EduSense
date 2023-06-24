@@ -1,16 +1,26 @@
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from "axios";
-import {useSelector, useDispatch} from 'react-redux';
-import {setLoggedIn} from '../actions/authActions';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoggedIn } from '../actions/authActions';
 
 export default function Login() {
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const dispatch = useDispatch();
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-    if (isLoggedIn) {
-        window.location.href = '/'
+    if(isLoggedIn){
+        window.location.href='/'
     }
+
+    const handleMsg = (text, color) => {
+        const responseElement = document.querySelector('.response');
+        const paragraphElement = document.createElement('p');
+        paragraphElement.setAttribute('class', color);
+        paragraphElement.textContent = text;
+        responseElement.innerHTML = '';
+        responseElement.appendChild(paragraphElement);
+    }
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -22,14 +32,22 @@ export default function Login() {
         }),
         onSubmit: async (values) => {
             try {
-                const response = await axios.post("http://localhost:3000/api/user/login", values);
+                const response = await axios.post('http://localhost:3000/api/user/login', values);
                 const token = response.data.token;
+                const msg = response.data.msg;
                 if (token) {
                     localStorage.setItem('token', token);
-                    dispatch(setLoggedIn());
+                    console.log(response.data)
+                    if (msg === 'successfully login') {
+                        handleMsg(msg,'text-green-600')
+
+                        dispatch(setLoggedIn()); // Dispatch the action to set the user as logged in
+                    }
+                } else {
+                    handleMsg(msg,'text-red-600')
                 }
             } catch (error) {
-                console.error("Error registering user:", error);
+                console.error('Error logging in:', error);
             }
         },
     });
@@ -39,7 +57,7 @@ export default function Login() {
             <div className="relative flex flex-col justify-center min-h-screen p-3 sm:p-0">
                 <div className="w-full p-6 m-auto bg-base-200 rounded-md shadow-lg shadow-black/50 lg:max-w-lg">
                     <h1 className="text-3xl font-semibold text-center text-purple-700">EduSense</h1>
-
+                    <div className="response text-sm text-center mt-4"></div>
                     <form onSubmit={formik.handleSubmit} className="space-y-4">
                         <div>
                             <label htmlFor="email" className="label">
