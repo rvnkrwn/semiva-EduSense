@@ -1,5 +1,3 @@
-import Card from "../components/Card";
-import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import fetchDataWithToken from "../services/setAuthorization";
@@ -39,7 +37,14 @@ export default function Quiz() {
             </>
         )
     }
-
+    const payload = {
+        code: '',
+        name: '',
+        description: '',
+        teacher: data._id,
+        question: [],
+        students: []
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         // Lakukan sesuatu dengan nilai command
@@ -56,13 +61,14 @@ export default function Quiz() {
         <div>
             <h2 className="text-xl font-bold">Masukkan Command</h2>
             <form onSubmit={handleSubmit}>
-        <textarea
-            className="border border-gray-300 p-2 mt-2 w-full"
-            value={command}
-            onChange={handleChange}
-            placeholder="Contoh: 5 soal matematika dan 7 soal ipa"
-            rows={4}
-        />
+            <textarea
+                className="border border-primary bg-base-200 rounded p-2 mt-2 w-full"
+                value={command}
+                onChange={handleChange}
+                style={{resize: 'none'}}
+                placeholder="Contoh: 5 soal matematika dan 7 soal ipa"
+                rows={4}
+            />
                 <div className='flex flex-col-reverse'>
                     <small className='font-bold'>
                         *noted: Harap Masukan jumlah soal dan materi soal saja, akan automatic membuat dan memiliki

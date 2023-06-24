@@ -25,6 +25,7 @@ export default function Header() {
                 Swal.fire("Logout!", "Your account has been logout.", "success");
                 localStorage.removeItem("token");
                 localStorage.removeItem("isLoggedIn");
+                window.location.href = '/login'
             }
         });
     };
@@ -67,6 +68,9 @@ export default function Header() {
                     <Link to="/profile">{data.full_name}</Link>
                 </li>
             )}
+            <li>
+                <Link to="/quiz">Make Quiz</Link>
+            </li>
             <li>
                 <Link to="#" onClick={() => handleLogout()}>
                     Logout
