@@ -1,7 +1,61 @@
-import ColorMode from "../colorMode"
+import ColorMode from "../colorMode";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import fetchDataWithToken from "../../services/setAuthorization";
+import Loading from "../Loading";
 
 export default function Header() {
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const [data, setData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const handleL
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Memanggil fungsi fetchDataWithToken untuk mendapatkan data dengan token
+                const response = await fetchDataWithToken('http://localhost:3000/api/user/get-user');
+
+                // Menyimpan data ke state komponen
+                setData(response);
+                if (response) {
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <>
+                <Loading/>
+            </>
+        )
+    }
+
+    const loggedInMenu = (
+        <ul className="menu menu-horizontal">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/profile">{data.full_name}</Link></li>
+            <li><Link to="/register">Register</Link></li>
+        </ul>
+    );
+
+    const loggedOutMenu = (
+        <ul className="menu menu-horizontal">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/register">Register</Link></li>
+        </ul>
+    );
+
+
     return (
         <>
             <div className="drawer">
@@ -20,27 +74,16 @@ export default function Header() {
                         </div>
                         <div className="flex-1 px-2 mx-2 md:text-xl tracking-wider font-bold">EduSense</div>
                         <div className="flex-none hidden lg:block">
-                            <ul className="menu menu-horizontal">
-                                {/* Navbar menu content here */}
-                                <li><Link to="/">Home</Link></li>
-                                <li><Link to="/login">Login</Link></li>
-                                <li><Link to="/register">Register</Link></li>
-                            </ul>
+                            {isLoggedIn ? loggedInMenu : loggedOutMenu}
                         </div>
-                        <ColorMode />
+                        <ColorMode/>
                     </div>
                 </div>
                 <div className="drawer-side" style={{zIndex: 99999}}>
                     <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
-                    <ul className="menu p-4 w-80 h-full bg-base-200">
-                        {/* Sidebar content here */}
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/login">Login</Link></li>
-                        <li><Link to="/register">Register</Link></li>
-                    </ul>
-
+                    {isLoggedIn ? loggedInMenu : loggedOutMenu}
                 </div>
             </div>
         </>
-    )
+    );
 }
