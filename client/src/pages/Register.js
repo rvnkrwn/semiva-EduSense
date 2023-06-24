@@ -85,7 +85,7 @@ export default function Register() {
         onSubmit: async (values) => {
             try {
                 const response = await axios.post("http://localhost:3000/api/user/register", values);
-                console.log(response);
+                if (response) return window.location.href='/login?msg=success'
             } catch (error) {
                 console.error("Error registering user:", error);
             }
