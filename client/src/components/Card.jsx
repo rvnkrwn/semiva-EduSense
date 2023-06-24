@@ -1,5 +1,4 @@
 import {Link} from "react-router-dom";
-import m from "../assets/image/erik-mclean-FoB-ImUjLqE-unsplash.jpg"
 export default function Card() {
     return (
         <Link to={'/home'}>

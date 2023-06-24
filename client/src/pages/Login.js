@@ -1,8 +1,16 @@
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
+import {useSelector, useDispatch} from 'react-redux';
+import {setLoggedIn} from '../actions/authActions';
 
 export default function Login() {
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const dispatch = useDispatch();
+
+    if (isLoggedIn) {
+        window.location.href = '/'
+    }
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -16,9 +24,10 @@ export default function Login() {
             try {
                 const response = await axios.post("http://localhost:3000/api/user/login", values);
                 const token = response.data.token;
-               if (token){
-                   localStorage.setItem('token',token)
-               }
+                if (token) {
+                    localStorage.setItem('token', token);
+                    dispatch(setLoggedIn());
+                }
             } catch (error) {
                 console.error("Error registering user:", error);
             }
