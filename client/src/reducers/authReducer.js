@@ -1,5 +1,6 @@
+const isLoggedIn = localStorage.getItem('isLoggedIn') || false;
 const initialState = {
-    isLoggedIn: false,
+    isLoggedIn: isLoggedIn,
 };
 
 const authReducer = (state = initialState, action) => {

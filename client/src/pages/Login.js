@@ -1,17 +1,14 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { setLoggedIn } from '../actions/authActions';
-
+import store from "../store";
 export default function Login() {
-    const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-    if(isLoggedIn){
-        window.location.href='/'
+    if (isLoggedIn) {
+           window.location.href = '/'
     }
-
     const handleMsg = (text, color) => {
         const responseElement = document.querySelector('.response');
         const paragraphElement = document.createElement('p');
@@ -40,8 +37,8 @@ export default function Login() {
                     console.log(response.data)
                     if (msg === 'successfully login') {
                         handleMsg(msg,'text-green-600')
-
-                        dispatch(setLoggedIn()); // Dispatch the action to set the user as logged in
+                        store.dispatch(setLoggedIn()); // Dispatch the action to set the user as logged in
+                        localStorage.setItem('isLoggedIn', 'true');
                     }
                 } else {
                     handleMsg(msg,'text-red-600')

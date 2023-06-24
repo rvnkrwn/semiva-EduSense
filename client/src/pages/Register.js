@@ -1,9 +1,15 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
+import {useEffect, useState} from "react";
+import {useFormik} from "formik";
 import * as Yup from "yup";
+import {useSelector} from 'react-redux';
 
 export default function Register() {
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    if (isLoggedIn) {
+        window.location.href = '/'
+    }
+
     const [provinces, setProvinces] = useState([]);
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
@@ -85,7 +91,7 @@ export default function Register() {
         onSubmit: async (values) => {
             try {
                 const response = await axios.post("http://localhost:3000/api/user/register", values);
-                if (response) return window.location.href='/login?msg=success'
+                if (response) return window.location.href = '/login?msg=success'
             } catch (error) {
                 console.error("Error registering user:", error);
             }
