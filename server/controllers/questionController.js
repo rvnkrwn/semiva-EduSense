@@ -11,6 +11,7 @@ const questionModel = Model.questionModel;
 exports.create = async (req, res) => {
     // const questions = req.user;
     const data = req.user;
+    res.send(data)
     const cleanedData = data.questions.replace(/\n/g, ' ');
 
 // Memisahkan setiap pertanyaan menggunakan regex

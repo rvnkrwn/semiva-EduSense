@@ -5,5 +5,5 @@ exports.hashing = async (password) => {
 }
 
 exports.comparing = async (password, hash) => {
-    return await bcrypt.hash(password, hash);
+    return await bcrypt.compareSync(password, hash);
 }

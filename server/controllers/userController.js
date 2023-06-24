@@ -33,7 +33,8 @@ exports.login = async (req, res) => {
     try {
         const user = await findUser(email)
         if (!user) return res.send({msg: 'Email not registered'});
-        if (!await comparing(password, user.password)) return res.send({msg: 'Password is Invalid'});
+        const match = await comparing(password, user.password)
+        if (!match) return res.send({msg: 'Password is Invalid'});
 
         const id = user.id;
         const payload = {
@@ -53,6 +54,16 @@ exports.findAllUser = async (req, res) => {
     try {
         const users = await userModel.find().select('-password');
         res.status(200).send(users);
+    } catch (error) {
+        res.status(500).send({message: 'Failed to fetch users', error});
+    }
+}
+
+exports.findUser = async (req, res) => {
+    try {
+        const data = await userModel.findById(req.user.id)
+        const {password, ...user} = data._doc;
+        res.status(200).send(user);
     } catch (error) {
         res.status(500).send({message: 'Failed to fetch users', error});
     }

@@ -6,6 +6,7 @@ module.exports = app => {
     userRoute.post('/login', userController.login)
 
     userRoute.get('/get-all-user', isLogin,userController.findAllUser);
+    userRoute.get('/get-user', isLogin,userController.findUser);
 
     userRoute.put('/update', isLogin,userController.update);
     app.use('/api/user', userRoute)
