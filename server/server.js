@@ -28,7 +28,7 @@ app.get('/', (req,res) => {
     res.send('Hello World');
 })
 require('./routes/userRouter')(app)
-require('./routes/openaiRouter')(app)
+require('./routes/questionRouter')(app)
 
 
 
