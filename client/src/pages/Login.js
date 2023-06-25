@@ -29,7 +29,7 @@ export default function Login() {
         }),
         onSubmit: async (values) => {
             try {
-                const response = await axios.post('http://localhost:3000/api/user/login', values);
+                const response = await axios.post('https://revank.my.id/api/user/login', values);
                 const token = response.data.token;
                 const msg = response.data.msg;
                 if (token) {

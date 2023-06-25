@@ -90,7 +90,7 @@ export default function Register() {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                const response = await axios.post("http://localhost:3000/api/user/register", values);
+                const response = await axios.post("https://revank.my.id/api/user/register", values);
                 if (response) return window.location.href = '/login?msg=success'
             } catch (error) {
                 console.error("Error registering user:", error);

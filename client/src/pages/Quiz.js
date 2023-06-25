@@ -21,7 +21,7 @@ const QuizForm = () => {
             try {
                 // Memanggil fungsi fetchDataWithToken untuk mendapatkan data dengan token
                 const response = await fetchDataWithToken(
-                    "http://localhost:3000/api/user/get-user"
+                    "https://revank.my.id/api/user/get-user"
                 );
 
                 // Menyimpan data ke state komponen
@@ -63,7 +63,7 @@ const QuizForm = () => {
 
     const handleSubmit = async (values, {setSubmitting}) => {
         try {
-            const response = await axios.post("http://localhost:3000/api/quiz/generate", values);
+            const response = await axios.post("https://revank.my.id/api/quiz/generate", values);
             setGenerateResponse(response)
             if (generateResponse.msg === 'Error Server') {
                 const responseElement = document.querySelector('.status');

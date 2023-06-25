@@ -26,7 +26,7 @@ export default function Home() {
 
                 // Make GET request to the API endpoint with headers
                 const response = await axios.get(
-                    "http://localhost:3000/api/quiz/find-all",
+                    "https://revank.my.id/api/quiz/find-all",
                     { headers }
                 );
 

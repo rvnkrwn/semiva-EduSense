@@ -35,7 +35,7 @@ export default function Header() {
             try {
                 // Memanggil fungsi fetchDataWithToken untuk mendapatkan data dengan token
                 const response = await fetchDataWithToken(
-                    "http://localhost:3000/api/user/get-user"
+                    "https://revank.my.id/api/user/get-user"
                 );
 
                 // Menyimpan data ke state komponen

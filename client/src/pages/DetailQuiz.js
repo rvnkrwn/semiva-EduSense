@@ -11,7 +11,7 @@ function useQuizDetail() {
         const fetchQuiz = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3000/api/quiz/${id}` // Ganti dengan URL API yang sesuai
+                    `https://revank.my.id/api/quiz/${id}` // Ganti dengan URL API yang sesuai
                 );
                 setQuiz(response.data);
                 setIsLoading(false);
@@ -35,7 +35,7 @@ export default function QuizDetail() {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const user = await axios.get("http://localhost:3000/api/user/get-user", {
+                const user = await axios.get("https://revank.my.id/api/user/get-user", {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
@@ -65,7 +65,7 @@ export default function QuizDetail() {
 
         try {
             const response = await axios.post(
-                `http://localhost:3000/api/quiz/submit/${id}/${quiz._id}`,
+                `https://revank.my.id/api/quiz/submit/${id}/${quiz._id}`,
                 payload,
                 {
                     headers: {
