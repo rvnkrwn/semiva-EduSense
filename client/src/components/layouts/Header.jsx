@@ -63,14 +63,14 @@ export default function Header() {
             <li>
                 <Link to="/">Home</Link>
             </li>
+            <li>
+                <Link to="/quiz">Make Quiz</Link>
+            </li>
             {data && (
                 <li>
                     <Link to="/profile">{data.full_name}</Link>
                 </li>
             )}
-            <li>
-                <Link to="/quiz">Make Quiz</Link>
-            </li>
             <li>
                 <Link to="#" onClick={() => handleLogout()}>
                     Logout

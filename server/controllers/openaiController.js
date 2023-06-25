@@ -75,6 +75,7 @@ require('dotenv').config();
 
 const configuration = new Configuration({
     apiKey: 'sess-b8LHi1ajicz1gnsxmIKQ6h2orBCBJAUaMOA1OKhi'
+    // apiKey: process.env.OPENAI_API_KEY
 });
 const openai = new OpenAIApi(configuration);
 
@@ -101,6 +102,7 @@ exports.chatAI = async (req, res, next) => {
     try {
         const completion = await openai.createCompletion({
             model: "text-davinci-003",
+            // model: "text-davinci-002-render-sha",
             prompt: generatePrompt(prompt),
             temperature: 0.6,
             max_tokens: 1000
@@ -130,5 +132,5 @@ exports.chatAI = async (req, res, next) => {
 function generatePrompt(prompt) {
     const capitalizedprompt =
         prompt[0].toUpperCase() + prompt.slice(1).toLowerCase();
-    return ` ${capitalizedprompt} to text format like this [{"no": 1,"question": "What is the capital of France?","options": ["London", "Paris", "Rome", "Berlin"],"answer": "Paris"},{"no": 2,"question": "Who painted the Mona Lisa?","options": ["Leonardo da Vinci", "Pablo Picasso", "Vincent van Gogh", "Michelangelo"],"answer": "Leonardo da Vinci"}] please dont make other response`
+    return ` ${capitalizedprompt} to text format like this [{"no": 1,"question": "What is the capital of France?","options": ["London", "Paris", "Rome", "Berlin"],"answer": "Paris"},{"no": 2,"question": "Who painted the Mona Lisa?","options": ["Leonardo da Vinci", "Pablo Picasso", "Vincent van Gogh", "Michelangelo"],"answer": "Leonardo da Vinci"}] please consistent to format responses`
 }

@@ -45,47 +45,38 @@ exports.findQuiz = async (req, res) => {
     }
 }
 
-
-exports.correctAnswers = async (req, res) => {
-    const { quizId, studentId } = req.params;
-
+exports.correctAnswers = async (req, res, next) => {
     try {
-        // Cek apakah quiz dengan ID yang diberikan ada dalam database
+        const { id, quizId } = req.params;
+        const { data } = req.body;
+
+        // Mendapatkan data kuis dari database
         const quiz = await quizModel.findById(quizId);
         if (!quiz) {
-            return res.status(404).json({ error: 'Quiz not found' });
+            return res.status(404).json({ message: 'Kuis tidak ditemukan' });
         }
 
-        // Cek apakah student dengan ID yang diberikan ada dalam array students
-        const studentIndex = quizModel.students.findIndex(student => student.toString() === studentId);
-        if (studentIndex === -1) {
-            return res.status(404).json({ error: 'Student not found' });
+        const correctedAnswers = {};
+
+        // Melakukan pengoreksian jawaban
+        for (const answerData of data) {
+            const { questionId, answer } = answerData;
+
+            // Mencari pertanyaan berdasarkan ID
+            const question = quiz.questions.find((q) => q._id.toString() === questionId);
+            if (!question) {
+                return res.status(400).json({ message: `Pertanyaan dengan ID ${questionId} tidak ditemukan` });
+            }
+
+            // Membandingkan jawaban dengan jawaban yang benar
+            const isCorrect = question.answer === answer;
+            correctedAnswers[questionId] = isCorrect;
         }
 
-        // Mengambil pertanyaan dan jawaban dari body request
-        const { answers } = req.body;
-
-        // Mengoreksi jawaban
-        const correctedAnswers = quizModel.questions.map((question, index) => {
-            const studentAnswer = answers[index];
-            return {
-                question: question.question,
-                studentAnswer,
-                correctAnswer: question.answer,
-                isCorrect: studentAnswer === question.answer
-            };
-        });
-
-        // Mengupdate array students dengan hasil koreksi jawaban
-        quizModel.students[studentIndex].correctedAnswers = correctedAnswers;
-
-        // Menyimpan perubahan ke database
-        await quizModel.save();
-
-        res.json({ message: 'Answers corrected successfully' });
+        // Mengirim hasil pengoreksian
+        res.status(200).json({ correctedAnswers });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        console.error('Error while grading quiz:', error);
+        res.status(500).json({ message: 'Terjadi kesalahan saat mengoreksi kuis' });
     }
-}
-  
+};

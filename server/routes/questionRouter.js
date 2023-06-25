@@ -9,5 +9,7 @@ module.exports = app => {
     quizRoute.get('/find-all', isLogin,questionController.findAllQuiz);
     quizRoute.get('/:id', isLogin,questionController.findQuiz);
 
+    quizRoute.post('/submit/:id/:quizId', isLogin,questionController.correctAnswers);
+
     app.use('/api/quiz', quizRoute)
 }

@@ -64,7 +64,7 @@ const QuizForm = () => {
 
     const handleSubmit = async (values, {setSubmitting}) => {
         try {
-            const response = await axios.post("http://localhost:3000/api/openai/ask", values);
+            const response = await axios.post("http://localhost:3000/api/quiz/generate", values);
             setGenerateResponse(response)
             if (generateResponse.msg === 'Error Server') {
                 const responseElement = document.querySelector('.status');
@@ -81,6 +81,7 @@ const QuizForm = () => {
                 paragraphElement.textContent = generateResponse.msg;
                 responseElement.innerHTML = '';
                 responseElement.appendChild(paragraphElement);
+                // window.location.href='/'
             }
         } catch (error) {
             console.error("Error:", error);
