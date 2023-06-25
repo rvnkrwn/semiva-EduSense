@@ -40,7 +40,7 @@ const QuizForm = () => {
 
     return (
         <div className="container mx-auto bg-base-200 p-8 rounded" style={{maxWidth: "400px"}}>
-            <h2 className="text-xl font-bold">Form Quiz</h2>
+            <h2 className="text-xl font-bold">Form Quiz Automatic Generate Questions</h2>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -50,6 +50,8 @@ const QuizForm = () => {
                     <Form>
                         <div className="my-2">
                             <label htmlFor="prompt">Prompt:</label>
+                            <br/>
+                            <small className="italic">ex: 5 soal ips dan ipa</small>
                             <Field
                                 type="text"
                                 id="prompt"
