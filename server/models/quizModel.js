@@ -1,12 +1,29 @@
 const mongoose = require('mongoose');
 
+const questionSchema = new mongoose.Schema({
+    no: {
+        type: Number,
+        required: true
+    },
+    question: {
+        type: String,
+        required: true
+    },
+    options: [{
+        type: String,
+        required: true
+    }],
+    answer: {
+        type: String,
+        required: true
+    }
+});
+
 const quizSchema = new mongoose.Schema({
     code: {
         type: String,
-        unique: true,
         required: true,
-        minlength: 5,
-        maxlength: 5
+        unique: true
     },
     name: {
         type: String,
@@ -18,32 +35,14 @@ const quizSchema = new mongoose.Schema({
     },
     teacher: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Teacher',
         required: true
     },
-    questions: [{
-        no: {
-            type: Number,
-            required: true
-        },
-        question: {
-            type: String,
-            required: true
-        },
-        options: [{
-            type: String
-        }],
-        answer: {
-            type: String,
-            required: true
-        }
-    }],
+    questions: [questionSchema],
     students: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Student'
     }]
-}, {
-    timestamps: true
 });
 
 const Quiz = mongoose.model('Quiz', quizSchema);
