@@ -1,21 +1,56 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, {useEffect, useState} from "react";
+import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import fetchDataWithToken from "../services/setAuthorization";
+import Loading from "../components/Loading";
 
 const QuizForm = () => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const [data, setData] = useState(null);
+    const [generateResponse, setGenerateResponse] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     if (!isLoggedIn) {
         window.location.href = "/login";
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Memanggil fungsi fetchDataWithToken untuk mendapatkan data dengan token
+                const response = await fetchDataWithToken(
+                    "http://localhost:3000/api/user/get-user"
+                );
+
+                // Menyimpan data ke state komponen
+                setData(response);
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                setIsLoading(false);
+            }
+        };
+
+        if (isLoggedIn) {
+            fetchData();
+        } else {
+            setIsLoading(false);
+        }
+    }, [isLoggedIn]);
+
+    if (isLoading) {
+        return <Loading/>;
+    }
+
     const initialValues = {
         prompt: "",
         code: "",
         name: "",
         description: "",
-        teacher: "",
-        students: "",
+        teacher: '6497787d73de920107eeef89',
+        students: data._id,
     };
 
     const validationSchema = Yup.object().shape({
@@ -27,12 +62,34 @@ const QuizForm = () => {
         students: Yup.string().required("Students IDs are required"),
     });
 
-    const handleSubmit = async (values, { setSubmitting }) => {
+    const handleSubmit = async (values, {setSubmitting}) => {
         try {
             const response = await axios.post("http://localhost:3000/api/openai/ask", values);
-            console.log("Response:", response.data);
+            setGenerateResponse(response)
+            if (generateResponse.msg === 'Error Server') {
+                const responseElement = document.querySelector('.status');
+                const paragraphElement = document.createElement('p');
+                paragraphElement.setAttribute('class', 'text-red-600');
+                paragraphElement.textContent = generateResponse.msg;
+                responseElement.innerHTML = '';
+                responseElement.appendChild(paragraphElement);
+            }
+            else {
+                const responseElement = document.querySelector('.status');
+                const paragraphElement = document.createElement('p');
+                paragraphElement.setAttribute('class', 'text-blue-600');
+                paragraphElement.textContent = generateResponse.msg;
+                responseElement.innerHTML = '';
+                responseElement.appendChild(paragraphElement);
+            }
         } catch (error) {
             console.error("Error:", error);
+            const responseElement = document.querySelector('.status');
+            const paragraphElement = document.createElement('p');
+            paragraphElement.setAttribute('class', 'text-red-600');
+            paragraphElement.textContent = error;
+            responseElement.innerHTML = '';
+            responseElement.appendChild(paragraphElement);
         } finally {
             setSubmitting(false);
         }
@@ -46,8 +103,9 @@ const QuizForm = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
-                {({ isSubmitting }) => (
+                {({isSubmitting}) => (
                     <Form>
+                        <div className="status p-2 mt-6 mb-2"></div>
                         <div className="my-2">
                             <label htmlFor="prompt">Prompt:</label>
                             <br/>
@@ -58,27 +116,27 @@ const QuizForm = () => {
                                 name="prompt"
                                 className="w-full input input-bordered input-primary"
                             />
-                            <ErrorMessage name="prompt" component="div" className="text-red-500" />
+                            <ErrorMessage name="prompt" component="div" className="text-red-500"/>
                         </div>
                         <div className="my-2">
-                            <label htmlFor="code">Code:</label>
+                            <label htmlFor="code">Code Quiz: <small>UPPERCASE 4-6</small></label>
                             <Field
                                 type="text"
                                 id="code"
                                 name="code"
                                 className="w-full input input-bordered input-primary"
                             />
-                            <ErrorMessage name="code" component="div" className="text-red-500" />
+                            <ErrorMessage name="code" component="div" className="text-red-500"/>
                         </div>
                         <div className="my-2">
-                            <label htmlFor="name">Name:</label>
+                            <label htmlFor="name">Name Quiz:</label>
                             <Field
                                 type="text"
                                 id="name"
                                 name="name"
                                 className="w-full input input-bordered input-primary"
                             />
-                            <ErrorMessage name="name" component="div" className="text-red-500" />
+                            <ErrorMessage name="name" component="div" className="text-red-500"/>
                         </div>
                         <div className="my-2">
                             <label htmlFor="description">Description:</label>
@@ -88,27 +146,18 @@ const QuizForm = () => {
                                 name="description"
                                 className="w-full input input-bordered input-primary"
                             />
-                            <ErrorMessage name="description" component="div" className="text-red-500" />
+                            <ErrorMessage name="description" component="div" className="text-red-500"/>
                         </div>
                         <div className="my-2">
-                            <label htmlFor="teacher">Teacher:</label>
-                            <Field
-                                type="text"
-                                id="teacher"
-                                name="teacher"
-                                className="w-full input input-bordered input-primary"
-                            />
-                            <ErrorMessage name="teacher" component="div" className="text-red-500" />
-                        </div>
-                        <div className="my-2">
-                            <label htmlFor="students">Students:</label>
+                            <label htmlFor="students">Students ID:</label>
                             <Field
                                 type="text"
                                 id="students"
                                 name="students"
                                 className="w-full input input-bordered input-primary"
+                                disabled={true}
                             />
-                            <ErrorMessage name="students" component="div" className="text-red-500" />
+                            <ErrorMessage name="students" component="div" className="text-red-500"/>
                         </div>
                         <button
                             className="bg-primary/80 hover:bg-primary text-white font-bold py-2 px-4 mt-2 rounded"

@@ -37,17 +37,8 @@ function separateQuestions(questionsString) {
 
 exports.create = async (req, res) => {
     try {
-        const questionString = req.user;
+        const questions = req.user;
         const {code, name, description, teacher, students} = req.body;
-
-        const questions = data.map(item => {
-            return {
-                no: item[0],
-                question: item[1],
-                options: item[2],
-                answer: item[3]
-            };
-        });
 
         const payload = {
             code: code,
@@ -57,11 +48,11 @@ exports.create = async (req, res) => {
             questions: questions,
             students: []
         }
-        return res.send(questions)
-        const post = await quizModel.create(payload);
-        if (post) {
+        await quizModel.create(payload).then(() => {
             res.send({msg: "Successfully Created"});
-        }
+        }).catch((error) => {
+            res.send({msg: "Error Server", error})
+        })
     } catch (error) {
         res.send({msg: "Error Server", error})
     }

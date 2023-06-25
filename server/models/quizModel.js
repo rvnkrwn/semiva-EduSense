@@ -21,7 +21,23 @@ const quizSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    questions: [],
+    questions: [{
+        no: {
+            type: Number,
+            required: true
+        },
+        question: {
+            type: String,
+            required: true
+        },
+        options: [{
+            type: String
+        }],
+        answer: {
+            type: String,
+            required: true
+        }
+    }],
     students: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
