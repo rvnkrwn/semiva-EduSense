@@ -55,7 +55,6 @@ const QuizForm = () => {
 
     const validationSchema = Yup.object().shape({
         prompt: Yup.string().required("Prompt is required"),
-        code: Yup.string().required("Code is required"),
         name: Yup.string().required("Name is required"),
         description: Yup.string().required("Description is required"),
         teacher: Yup.string().required("Teacher ID is required"),
@@ -77,11 +76,13 @@ const QuizForm = () => {
             else {
                 const responseElement = document.querySelector('.status');
                 const paragraphElement = document.createElement('p');
-                paragraphElement.setAttribute('class', 'text-blue-600');
+                paragraphElement.setAttribute('class', 'text-green-600');
                 paragraphElement.textContent = generateResponse.msg;
                 responseElement.innerHTML = '';
                 responseElement.appendChild(paragraphElement);
-                // window.location.href='/'
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 2000)
             }
         } catch (error) {
             console.error("Error:", error);
@@ -106,30 +107,8 @@ const QuizForm = () => {
             >
                 {({isSubmitting}) => (
                     <Form>
-                        <div className="status p-2 mt-6 mb-2"></div>
-                        <div className="my-2">
-                            <label htmlFor="prompt">Prompt:</label>
-                            <br/>
-                            <small className="italic">ex: 5 soal ips dan ipa</small>
-                            <Field
-                                type="text"
-                                id="prompt"
-                                name="prompt"
-                                className="w-full input input-bordered input-primary"
-                            />
-                            <ErrorMessage name="prompt" component="div" className="text-red-500"/>
-                        </div>
-                        <div className="my-2">
-                            <label htmlFor="code">Code Quiz: <small>UPPERCASE 4-6</small></label>
-                            <Field
-                                type="text"
-                                id="code"
-                                name="code"
-                                className="w-full input input-bordered input-primary"
-                            />
-                            <ErrorMessage name="code" component="div" className="text-red-500"/>
-                        </div>
-                        <div className="my-2">
+                        <div className="status p-2 mt-6 mb-2 text-center"></div>
+                        <div className="mt-2">
                             <label htmlFor="name">Name Quiz:</label>
                             <Field
                                 type="text"
@@ -140,12 +119,26 @@ const QuizForm = () => {
                             <ErrorMessage name="name" component="div" className="text-red-500"/>
                         </div>
                         <div className="my-2">
+                            <label htmlFor="prompt">Prompt:</label>
+                            <br/>
+                            <small className="italic">ex: 5 soal ips dan ipa</small>
+                            <Field
+                                as="textarea"
+                                id="prompt"
+                                name="prompt"
+                                className="w-full input input-bordered input-primary h-32"
+                                style={{resize: 'none'}}
+                            />
+                            <ErrorMessage name="prompt" component="div" className="text-red-500"/>
+                        </div>
+                        <div className="my-2">
                             <label htmlFor="description">Description:</label>
                             <Field
                                 as="textarea"
                                 id="description"
                                 name="description"
-                                className="w-full input input-bordered input-primary"
+                                className="w-full input input-bordered input-primary h-20"
+                                style={{resize: 'none'}}
                             />
                             <ErrorMessage name="description" component="div" className="text-red-500"/>
                         </div>

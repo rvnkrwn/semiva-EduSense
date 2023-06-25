@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 
 export default function Home() {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     if (!isLoggedIn) {
@@ -35,6 +35,7 @@ export default function Home() {
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
+                setIsLoading(false);
             }
         };
 
@@ -50,7 +51,7 @@ export default function Home() {
     }
 
     // Get the first 3 quizzes from the data
-    const quizzes = data.slice(0, 3); // Updated line
+    const quizzes = data.slice(0, 3);
 
     return (
         <>

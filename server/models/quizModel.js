@@ -23,7 +23,16 @@ const quizSchema = new mongoose.Schema({
     code: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        minlength: 6,
+        maxlength: 8,
+        validate: {
+            validator: function (value) {
+                // Regular expression to match uppercase letters and random numbers
+                return /^[A-Z0-9]+$/.test(value);
+            },
+            message: 'Code must consist of uppercase letters and random numbers only'
+        }
     },
     name: {
         type: String,

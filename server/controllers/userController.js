@@ -79,3 +79,15 @@ exports.update = async (req, res) => {
         res.status(500).send({message: 'Failed to update users', error});
     }
 }
+
+exports.updateGrade = async (req, res) => {
+    const {id,quizId,grade} = req.user;
+    try {
+        const user = await userModel.findById(id)
+        user.quizResults.push({quizId,grade})
+        await user.save();
+        res.status(200).send({msg: 'Successful to update users'});
+    } catch (error) {
+        res.status(500).send({msg: 'Failed to update users', error});
+    }
+}

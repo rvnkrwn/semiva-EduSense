@@ -1,26 +1,52 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {useParams} from "react-router-dom";
+import Loading from "../components/Loading";
 
-export default function QuizDetail() {
-    const [id, setId] = useState(null);
+function useQuizDetail() {
+    const {id} = useParams();
     const [quiz, setQuiz] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedAnswers, setSelectedAnswers] = useState({});
 
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/api/quiz/6497f71fec22b0582382ebd9" // Ganti dengan URL API yang sesuai
+                    `http://localhost:3000/api/quiz/${id}` // Ganti dengan URL API yang sesuai
                 );
                 setQuiz(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching quiz:", error);
+                setIsLoading(false);
             }
         };
 
         fetchQuiz();
+    }, [id]);
+
+    return {quiz, isLoading};
+}
+
+export default function QuizDetail() {
+    const {quiz, isLoading} = useQuizDetail();
+    const [id, setId] = useState(null);
+    const [selectedAnswers, setSelectedAnswers] = useState({});
+
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const user = await axios.get("http://localhost:3000/api/user/get-user", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                setId(user.data._id);
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        };
+        getUser();
     }, []);
 
     const handleAnswerChange = (questionId, answer) => {
@@ -30,30 +56,28 @@ export default function QuizDetail() {
         }));
     };
 
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const user = await axios.get('http://localhost:3000/api/user/get-user',{
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                setId(user.data._id);
-            } catch (error) {
-                console.error("Error fetching user:", error);
-            }
-        }
-        getUser();
-    })
     const handleSubmit = async () => {
-        const payload = Object.entries(selectedAnswers).map(([questionId, answer]) => ({questionId, answer}));
-        const response = await axios.post(`http://localhost:3000/api/quiz/submit/${id}/${quiz._id}`, payload, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        });
+        const payload = Object.entries(selectedAnswers).map(([questionId, answer]) => (
+            {
+                questionId:questionId,
+                answer:answer,
+            }
+        ));
 
-        console.log(response)
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/api/quiz/submit/${id}/${quiz._id}`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log(response)
+        } catch (error) {
+            console.error("Error submitting quiz:", error);
+        }
     };
 
     if (isLoading) {
@@ -61,18 +85,18 @@ export default function QuizDetail() {
     }
 
     return (
-        <div>
+        <div className="bg-base-200 p-10">
             <h1>{quiz.name}</h1>
             <p>{quiz.description}</p>
             <h2>Questions:</h2>
             <form>
                 {quiz.questions.map((question) => (
-                    <div key={question._id}>
+                    <div key={question._id} className="my-6 ">
                         <h3>{question.question}</h3>
-                        <ul>
+                        <ul className="leading-loose text-lg">
                             {question.options.map((option) => (
                                 <li key={option}>
-                                    <label>
+                                    <label className="flex">
                                         <input
                                             type="checkbox"
                                             name={`question-${question._id}`}
@@ -81,6 +105,7 @@ export default function QuizDetail() {
                                             onChange={(e) =>
                                                 handleAnswerChange(question._id, e.target.value)
                                             }
+                                            className="mr-2 radio radio-primary radio-xs self-center"
                                         />
                                         {option}
                                     </label>
@@ -89,7 +114,9 @@ export default function QuizDetail() {
                         </ul>
                     </div>
                 ))}
-                <button type="button" onClick={handleSubmit}>Submit</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={handleSubmit}>
+                    Submit
+                </button>
             </form>
         </div>
     );
