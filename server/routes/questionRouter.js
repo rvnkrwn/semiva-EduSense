@@ -7,6 +7,7 @@ module.exports = app => {
 
     quizRoute.post('/generate', isLogin, openaiController.chatAI, questionController.create);
     quizRoute.get('/find-all', isLogin,questionController.findAllQuiz);
+    quizRoute.get('/:id', isLogin,questionController.findQuiz);
 
     app.use('/api/quiz', quizRoute)
 }

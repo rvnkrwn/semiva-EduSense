@@ -5,6 +5,7 @@ import {Route, Routes} from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Quiz from "./pages/Quiz";
+import DetailQuiz from "./pages/DetailQuiz";
 
 export default function App() {
     return (
@@ -15,7 +16,7 @@ export default function App() {
                     <Route path="/" element={<Home/>} />
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
-                    <Route path="/quiz" element={<Quiz/>} />
+                    <Route path="/quiz/:id" element={<DetailQuiz/>} />
                 </Routes>
             </main>
             <Footer/>

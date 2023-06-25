@@ -34,6 +34,16 @@ exports.findAllQuiz = async (req, res) => {
     }
 }
 
+exports.findQuiz = async (req, res) => {
+    try {
+        const {id} = req.params
+        // Send the response data to the client
+        const response = await quizModel.findById(id)
+        res.status(200).send(response);
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to fetch quizzes', error });
+    }
+}
 
 
 exports.correctAnswers = async (req, res) => {
