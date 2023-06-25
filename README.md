@@ -25,20 +25,30 @@ Here are the steps to run this application on your local development environment
     - Requirement 3: Text editor
 
 2. **Installation**: Follow these steps to install the application:
-    - Step 1: `git clone https://github.com/rvnkrwn/semiva-EduSense.git`
-    - Step 2: `cd semiva-EduSense`
+   ```bash
+    git clone https://github.com/rvnkrwn/semiva-EduSense.git`
+    cd semiva-EduSense`
+   ```
 
-3. **Configuration**: Configure the application using the following steps:
-    - Step 1: `cd server`
+4. **Configuration**: Configure the application using the following steps:
+   ```bash
+    cd server
+    ```
     - Step 2: Replace `env` with `.env`
     - Step 3: Enter the necessary configuration data in `.env`
 
-4. **Running the Application**: To run the application, follow these steps:
+5. **Running the Application**: To run the application, follow these steps:
     - Step 1: Open 2 terminals with the same path in `semiva-EduSense`
-    - Step 2: In one terminal, run `cd server && npm run start`
-    - Step 3: In the other terminal, run `cd client && npm run start`
+    - Step 2: In one terminal, run
+      ```bash
+      cd server && npm run start
+      ```
+    - Step 3: In the other terminal, run
+      ```bash
+      cd client && npm run start
+      ```
 
-5. **Usage**: Explain how to use the application:
+6. **Usage**: Explain how to use the application:
     - Step 1: Open it in a browser.
     - Step 2: Register.
     - Step 3: Log in.
