@@ -3,8 +3,7 @@ const {Configuration, OpenAIApi} = require('openai');
 require('dotenv').config();
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-    organization: process.env.OPENAI_ORGANIZATION
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 const openai = new OpenAIApi(configuration);
@@ -36,8 +35,6 @@ Habibie", "Megawati Soekarnoputri"], "answer": "BJ Habibie"}
         });
         const dataJSON = {data: response.data.choices[0].text};
 
-        console.log(dataJSON);
-        res.send(dataJSON.data)
         req.user = dataJSON.data;
         next();
     } catch (error) {
