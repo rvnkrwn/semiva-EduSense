@@ -84,10 +84,11 @@ exports.updateGrade = async (req, res) => {
     const {id,quizId,grade} = req.user;
     try {
         const user = await userModel.findById(id)
+        user.selectedQuiz.push({Quiz: quizId})
         user.quizResults.push({quizId,grade})
         await user.save();
-        res.status(200).send({msg: 'Successful to update users'});
+        res.status(200).send({msg: 'Answers submitted and graded successfully'});
     } catch (error) {
-        res.status(500).send({msg: 'Failed to update users', error});
+        res.status(500).send({msg: 'Failed to submit and grade answers', error});
     }
 }

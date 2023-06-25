@@ -79,10 +79,12 @@ const QuizForm = () => {
                 paragraphElement.setAttribute('class', 'text-green-600');
                 paragraphElement.textContent = generateResponse.msg;
                 responseElement.innerHTML = '';
-                responseElement.appendChild(paragraphElement);
-                setTimeout(() => {
-                    window.location.href = '/'
-                }, 2000)
+                const waiting = responseElement.appendChild(paragraphElement);
+                if (waiting){
+                    setTimeout(() => {
+                        window.location.href = '/'
+                    }, 3000)
+                }
             }
         } catch (error) {
             console.error("Error:", error);
@@ -154,6 +156,7 @@ const QuizForm = () => {
                             <ErrorMessage name="students" component="div" className="text-red-500"/>
                         </div>
                         <button
+                            id="submit"
                             className="bg-primary/80 hover:bg-primary text-white font-bold py-2 px-4 mt-2 rounded"
                             type="submit"
                             disabled={isSubmitting}

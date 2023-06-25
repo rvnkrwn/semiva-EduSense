@@ -1,7 +1,6 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import Loading from "../components/Loading";
 
 function useQuizDetail() {
     const {id} = useParams();
@@ -74,7 +73,17 @@ export default function QuizDetail() {
                     },
                 }
             );
-            console.log(response)
+            if (response){
+                const responseElement = document.querySelector('.status');
+                const paragraphElement = document.createElement('p');
+                paragraphElement.setAttribute('class', 'text-green-600');
+                paragraphElement.textContent = response.data.msg;
+                responseElement.innerHTML = '';
+                responseElement.appendChild(paragraphElement);
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 3000)
+            }
         } catch (error) {
             console.error("Error submitting quiz:", error);
         }
@@ -85,11 +94,12 @@ export default function QuizDetail() {
     }
 
     return (
-        <div className="bg-base-200 p-10">
-            <h1>{quiz.name}</h1>
-            <p>{quiz.description}</p>
-            <h2>Questions:</h2>
+        <div className="bg-base-200 p-10 rounded-2xl shadow">
+            <h1 className="text-2xl text-center">{quiz.name}</h1>
+            <p className="text-center text-lg">{quiz.description}</p>
             <form>
+                <div className="status p-2 mt-6 mb-2 text-center"></div>
+                <h2>Questions:</h2>
                 {quiz.questions.map((question) => (
                     <div key={question._id} className="my-6 ">
                         <h3>{question.question}</h3>

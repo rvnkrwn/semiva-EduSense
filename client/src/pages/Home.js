@@ -66,7 +66,7 @@ export default function Home() {
                     {quizzes.length > 0 ? (
                         quizzes.map((quiz) => (
                             <Link to={`/quiz/${quiz._id}`} key={quiz._id}>
-                                <div className="card w-72 bg-base-100 shadow-xl m-2">
+                                <div className="card w-72 h-96 bg-base-100 shadow-xl m-2">
                                     <figure className="h-60">
                                         <img
                                             src={
@@ -78,11 +78,11 @@ export default function Home() {
                                     <div className="card-body">
                                         <h2 className="card-title">
                                             {quiz.name}
-                                            <div className="badge badge-secondary">class</div>
                                         </h2>
                                         <p>{quiz.description}</p>
                                         <div className="card-actions justify-end">
-                                            <div className="badge badge-outline">Mapel Wajib</div>
+                                            <label htmlFor={quiz.code}></label>
+                                            <span id={quiz.code} className="badge badge-primary">{quiz.code}</span>
                                         </div>
                                     </div>
                                 </div>
