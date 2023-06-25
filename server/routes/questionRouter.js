@@ -1,9 +1,12 @@
 const openaiController = require('../controllers/openaiController');
 const questionController = require('../controllers/questionController');
 const {isLogin} = require("../middlewares/authMiddleware");
-const openaiRoute = require('express').Router();
-module.exports = app => {
-    openaiRoute.post('/ask', openaiController.chatAI, questionController.create)
+const quizRoute = require('express').Router();
 
-    app.use('/api/openai', openaiRoute)
+module.exports = app => {
+
+    quizRoute.post('/generate', isLogin, openaiController.chatAI, questionController.create);
+    quizRoute.get('/find-all', isLogin,questionController.findAllQuiz);
+
+    app.use('/api/quiz', quizRoute)
 }

@@ -1,7 +1,7 @@
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import fetchDataWithToken from "../services/setAuthorization";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Loading from "../components/Loading";
 
 export default function Home() {
@@ -16,16 +16,23 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Call fetchDataWithToken function to get data with token
-                const response = await fetchDataWithToken(
-                    "http://localhost:3000/api/user/get-user"
+                // Get token from local storage
+                const token = localStorage.getItem("token");
+
+                // Set headers with token
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+
+                // Make GET request to the API endpoint with headers
+                const response = await axios.get(
+                    "http://localhost:3000/api/quiz/find-all",
+                    { headers }
                 );
 
                 // Save data to component state
-                setData(response);
-                if (response) {
-                    setIsLoading(false);
-                }
+                setData(response.data);
+                setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -37,13 +44,13 @@ export default function Home() {
     if (isLoading) {
         return (
             <>
-                <Loading/>
+                <Loading />
             </>
         );
     }
 
     // Get the first 3 quizzes from the data
-    const quizzes = data.quizResults.slice(0, 3);
+    const quizzes = data.slice(0, 3); // Updated line
 
     return (
         <>
@@ -57,7 +64,7 @@ export default function Home() {
                 <div className="cards p-2 flex flex-wrap justify-center md:justify-start">
                     {quizzes.length > 0 ? (
                         quizzes.map((quiz) => (
-                            <Link to={`/quiz/${quiz.id}`} key={quiz.id}>
+                            <Link to={`/quiz/${quiz._id}`} key={quiz._id}>
                                 <div className="card w-72 bg-base-100 shadow-xl m-2">
                                     <figure className="h-60">
                                         <img

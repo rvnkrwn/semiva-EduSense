@@ -17,12 +17,23 @@ exports.create = async (req, res) => {
             students,
         };
         await quizModel.create(payload);
-        res.status(200).json({ message: 'Quiz created successfully' });
+        res.status(200).json({ msg: 'Quiz created successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Failed to create quiz', error });
+        res.status(500).json({ msg: 'Failed to create quiz', error });
     }
 };
+
+exports.findAllQuiz = async (req, res) => {
+    try {
+        const response = await quizModel.find();
+        // Send the response data to the client
+        res.status(200).send(response);
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to fetch quizzes', error });
+    }
+}
+
 
 
 exports.correctAnswers = async (req, res) => {
