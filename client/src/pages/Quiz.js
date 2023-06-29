@@ -65,15 +65,7 @@ const QuizForm = () => {
         try {
             const response = await axios.post("https://revank.my.id/api/quiz/generate", values);
             setGenerateResponse(response)
-            if (generateResponse.msg === 'Error Server') {
-                const responseElement = document.querySelector('.status');
-                const paragraphElement = document.createElement('p');
-                paragraphElement.setAttribute('class', 'text-red-600');
-                paragraphElement.textContent = generateResponse.msg;
-                responseElement.innerHTML = '';
-                responseElement.appendChild(paragraphElement);
-            }
-            else {
+            if (response) {
                 const responseElement = document.querySelector('.status');
                 const paragraphElement = document.createElement('p');
                 paragraphElement.setAttribute('class', 'text-green-600');
